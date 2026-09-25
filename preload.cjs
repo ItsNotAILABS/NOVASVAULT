@@ -17,7 +17,9 @@ contextBridge.exposeInMainWorld('nova', {
     list: () => ipcRenderer.invoke('nova:vault-list'),
     read: (id) => ipcRenderer.invoke('nova:vault-read', id),
     write: (record) => ipcRenderer.invoke('nova:vault-write', record),
-    delete: (id) => ipcRenderer.invoke('nova:vault-delete', id)
+    delete: (id) => ipcRenderer.invoke('nova:vault-delete', id),
+    seal: () => ipcRenderer.invoke('nova:vault-seal'),
+    exportExit: () => ipcRenderer.invoke('nova:vault-export')
   }),
   runtime: Object.freeze({
     load: () => ipcRenderer.invoke('nova:runtime-load'),

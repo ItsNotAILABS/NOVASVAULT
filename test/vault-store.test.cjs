@@ -13,9 +13,16 @@ async function temporaryVault(t, options) {
 
 test('initializes, locks, unlocks, and rejects a wrong passphrase', async (t) => {
   const { root, store } = await temporaryVault(t);
-  assert.deepEqual(await store.status(), { initialized: false, unlocked: false, formatVersion: null });
+  const fresh = await store.status();
+  assert.equal(fresh.initialized, false);
+  assert.equal(fresh.unlocked, false);
+  assert.equal(fresh.guarantee, 'owner-held-passphrase');
   await store.initialize('a strong test passphrase');
-  assert.deepEqual(await store.status(), { initialized: true, unlocked: true, formatVersion: 1 });
+  const opened = await store.status();
+  assert.equal(opened.initialized, true);
+  assert.equal(opened.unlocked, true);
+  assert.equal(opened.algorithm, 'aes-256-gcm');
+  assert.equal(opened.kdf, 'scrypt');
   store.lock();
   await assert.rejects(store.unlock('this passphrase is wrong'), /Unable to unlock vault/);
   await store.unlock('a strong test passphrase');
@@ -72,6 +79,20 @@ test('runtime state persists encrypted across store instances', async (t) => {
   const diskFiles = await fs.readdir(path.join(root, '.nova', 'records'));
   const disk = await fs.readFile(path.join(root, '.nova', 'records', diskFiles[0]), 'utf8');
   assert.equal(disk.includes('compile'), false);
+});
+
+test('exit bundle is ciphertext and the chain moves when a record changes', async (t) => {
+  const { store } = await temporaryVault(t);
+  await store.initialize('exit bundle passphrase');
+  await store.write('note', 'plain secret text');
+  const first = await store.exportExit();
+  const dumped = JSON.stringify(first);
+  assert.equal(dumped.includes('plain secret text'), false);
+  assert.equal(dumped.includes('exit bundle passphrase'), false);
+  assert.equal(first.chain, (await store.status()).chain);
+  await store.write('note', 'plain secret text changed');
+  const second = await store.exportExit();
+  assert.notEqual(second.chain, first.chain);
 });
 
 test('enforces record size limits and delete semantics', async (t) => {

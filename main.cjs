@@ -112,6 +112,17 @@ function registerIpc() {
     return vaultStore.write(record.id, record.data, { kind: record.kind });
   });
   ipcMain.handle('nova:vault-delete', (_event, id) => vaultStore.delete(id));
+  ipcMain.handle('nova:vault-seal', () => vaultStore.seal());
+  ipcMain.handle('nova:vault-export', async () => {
+    const bundle = await vaultStore.exportExit();
+    const result = await dialog.showSaveDialog(mainWindow, {
+      defaultPath: 'novasvaul-exit.json',
+      filters: [{ name: 'JSON', extensions: ['json'] }]
+    });
+    if (result.canceled || !result.filePath) return { ok: false, canceled: true, chain: bundle.chain };
+    await fs.writeFile(result.filePath, `${JSON.stringify(bundle, null, 2)}\n`, { encoding: 'utf8', mode: 0o600 });
+    return { ok: true, path: result.filePath, chain: bundle.chain };
+  });
   ipcMain.handle('nova:runtime-load', () => vaultStore.loadRuntimeState({ version: 1, agents: [], kernels: [], queue: [] }));
   ipcMain.handle('nova:runtime-save', (_event, state) => vaultStore.saveRuntimeState(state));
 }

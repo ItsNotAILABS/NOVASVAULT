@@ -23,26 +23,39 @@
     <div class="workspace">
       <aside class="sidebar">
         <div class="side-section"><div class="section-label">FAVORITES</div><button class="nav-item active" data-location="home"><span>⌂</span>Home</button><button class="nav-item" data-location="desktop"><span>▣</span>Desktop</button><button class="nav-item" data-location="documents"><span>▤</span>Documents</button><button class="nav-item" data-location="downloads"><span>↓</span>Downloads</button><button class="nav-item" data-location="pictures"><span>▧</span>Pictures</button></div>
-        <div class="side-section"><div class="section-label">WORKSPACE</div><button class="nav-item" data-location="vault"><span class="vault-icon">◆</span>Nova Vault <em>LOCAL</em></button><button class="nav-item" data-location="kernels"><span>◈</span>Kernels <small>3</small></button><button class="nav-item" data-location="agents"><span>✦</span>Agents <small>4</small></button><button class="nav-item" data-location="documents-runtime"><span>▥</span>Runtime Docs</button></div>
+        <div class="side-section"><div class="section-label">WORKSPACE</div><button class="nav-item" data-location="vault"><span class="vault-icon">◆</span>Nova Vault <em>LOCAL</em></button><button class="nav-item" id="focus-notes"><span>≡</span>Sealed notes</button><button class="nav-item" id="focus-exit"><span>↗</span>Exit bundle</button></div>
         <div class="side-section"><div class="section-label">THIS MACHINE</div><button class="nav-item" id="choose-folder"><span>▱</span>Browse local folder</button><button class="nav-item" data-location="recent"><span>◷</span>Recent</button></div>
-        <div class="sidebar-footer"><div class="storage-ring"><span>LOCAL</span></div><div><strong>Sovereign storage</strong><p>Files remain on this machine</p></div></div>
+        <div class="sidebar-footer"><div class="storage-ring"><span>KEY</span></div><div><strong>Owner-held key</strong><p>AES-256-GCM · no recovery backdoor</p></div></div>
       </aside>
 
       <main class="explorer">
         <div class="explorer-head"><div><div class="eyebrow" id="view-eyebrow">LOCAL FILES</div><h1 id="view-title">Home</h1></div><div class="head-actions"><button id="new-folder" class="quiet-button">＋ New folder</button><button id="view-list" class="view-toggle selected">☷</button><button id="view-grid" class="view-toggle">⊞</button></div></div>
-        <div class="quick-strip"><button data-location="vault"><span class="quick-icon violet">◆</span><span><b>Nova Vault</b><small>Protected workspace</small></span></button><button data-location="kernels"><span class="quick-icon blue">◈</span><span><b>Compute kernels</b><small>3 ready to run</small></span></button><button data-location="agents"><span class="quick-icon green">✦</span><span><b>Agent workers</b><small>2 active now</small></span></button></div>
+        <div class="quick-strip"><button data-location="vault"><span class="quick-icon violet">◆</span><span><b>Nova Vault</b><small>Ciphertext on this machine</small></span></button><button id="quick-note" type="button"><span class="quick-icon blue">≡</span><span><b>Sealed note</b><small>Written only while unlocked</small></span></button><button id="quick-exit" type="button"><span class="quick-icon green">↗</span><span><b>Export exit</b><small>Ciphertext bundle, no key</small></span></button></div>
         <div class="file-toolbar"><span id="item-count">0 items</span><div><button id="sort-name">Name ↕</button><button id="filter">☷ Filter</button></div></div>
         <div id="file-view" class="file-view"><div class="empty-state"><div class="loader"></div><p>Opening local workspace…</p></div></div>
         <footer class="statusbar"><span id="status-text">Ready</span><span id="status-selection"></span><span class="status-right">NOVASVAUL 0.1 · LOCAL-FIRST</span></footer>
       </main>
 
-      <aside class="runtime-panel">
-        <div class="runtime-heading"><div><div class="eyebrow">NOVA RUNTIME</div><h2>Virtual computer</h2></div><span class="pulse">● LIVE</span></div>
-        <div class="runtime-card machine-card"><div class="card-title"><span>◉</span> MACHINE CORE <b>HEALTHY</b></div><div class="core-metrics"><div><strong>12.4</strong><small>GB memory</small></div><div><strong>04</strong><small>cores online</small></div><div><strong>08</strong><small>queued tasks</small></div></div><div class="meter"><i style="width: 38%"></i></div><small class="muted">Local resources · no remote execution</small></div>
-        <div class="runtime-card"><div class="card-title"><span>✦</span> AGENT WORKERS <button id="agents-open">View all</button></div><div class="agent-row"><span class="agent-avatar amber">A</span><div><b>Atlas</b><small>Indexing workspace</small></div><i class="online"></i></div><div class="agent-row"><span class="agent-avatar blue">R</span><div><b>Rhea</b><small>Document kernel</small></div><i class="online"></i></div><div class="agent-row"><span class="agent-avatar gray">S</span><div><b>Scout</b><small>Standing by</small></div><i class="idle"></i></div></div>
-        <div class="runtime-card"><div class="card-title"><span>◈</span> KERNELS <button id="kernels-open">Manage</button></div><div class="kernel-row"><span class="kernel-dot running"></span><div><b>Nova Indexer</b><small>filesystem · running</small></div><span class="kernel-time">1.2s</span></div><div class="kernel-row"><span class="kernel-dot ready"></span><div><b>Document Studio</b><small>docs · ready</small></div><span class="kernel-time">—</span></div><div class="kernel-row"><span class="kernel-dot ready"></span><div><b>Vault Integrity</b><small>hash · ready</small></div><span class="kernel-time">—</span></div></div>
-        <div class="runtime-card activity"><div class="card-title"><span>◷</span> ACTIVITY <button id="clear-activity">Clear</button></div><div id="activity-feed"><p><time>now</time><span>Runtime initialized on this machine</span></p><p><time>now</time><span>Vault boundary verified</span></p><p><time>—</time><span>Waiting for a task</span></p></div></div>
-        <button id="open-console" class="console-button">⌘ Open runtime console <kbd>Ctrl J</kbd></button>
+      <aside class="runtime-panel" id="vault-panel">
+        <div class="runtime-heading"><div><div class="eyebrow">ONE GUARANTEE</div><h2>Owner-held vault</h2></div><span class="pulse" id="vault-pill">LOCKED</span></div>
+        <div class="runtime-card">
+          <div class="card-title"><span>◆</span> AES-256-GCM</div>
+          <p class="guarantee">Scrypt derives the only key from your passphrase. The renderer never sees it. There is no recovery backdoor, no cloud copy, and no chain receipt. The chain below is a hash of ciphertext on this machine.</p>
+          <code id="vault-chain">—</code>
+        </div>
+        <form class="runtime-card" id="vault-gate">
+          <div class="card-title"><span>◉</span> PASSPHRASE</div>
+          <input id="vault-pass" type="password" autocomplete="off" minlength="12" placeholder="12 or more characters" />
+          <div class="vault-actions"><button class="quiet-button" id="vault-primary" type="submit">Initialize</button><button class="quiet-button" id="vault-lock" type="button">Lock</button></div>
+        </form>
+        <form class="runtime-card" id="note-form">
+          <div class="card-title"><span>≡</span> SEALED NOTE</div>
+          <input id="note-id" placeholder="record id" autocomplete="off" />
+          <textarea id="note-body" rows="3" placeholder="Stays ciphertext at rest"></textarea>
+          <button class="quiet-button" type="submit">Seal note</button>
+          <ul id="vault-records"></ul>
+        </form>
+        <button id="vault-export" class="console-button" type="button">↗ Export exit <kbd>ciphertext</kbd></button>
       </aside>
     </div>
   </div>
