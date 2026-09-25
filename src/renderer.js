@@ -103,6 +103,18 @@ async function exportExit() {
     setToast(`Exit bundle saved. Chain ${result.chain.slice(0, 12)}.`);
   } catch (error) { setToast(error.message); }
 }
+function sayGuarantee() {
+  const chain = ($('vault-chain').textContent || '').trim();
+  const pill = $('vault-pill').textContent || 'LOCKED';
+  const spoken = `${$('vault-statement').innerText} This vault is ${pill}. The chain hash is ${chain}.`;
+  if (!window.speechSynthesis) { setToast(spoken); return; }
+  window.speechSynthesis.cancel();
+  const utter = new SpeechSynthesisUtterance(spoken);
+  utter.rate = 1;
+  window.speechSynthesis.speak(utter);
+  setToast('Saying the guarantee.');
+}
+$('say-guarantee').onclick = sayGuarantee;
 $('vault-export').onclick = exportExit;
 $('quick-exit').onclick = exportExit;
 $('focus-exit').onclick = exportExit;

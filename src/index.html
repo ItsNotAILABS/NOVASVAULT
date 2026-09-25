@@ -39,8 +39,13 @@
       <aside class="runtime-panel" id="vault-panel">
         <div class="runtime-heading"><div><div class="eyebrow">ONE GUARANTEE</div><h2>Owner-held vault</h2></div><span class="pulse" id="vault-pill">LOCKED</span></div>
         <div class="runtime-card">
-          <div class="card-title"><span>◆</span> AES-256-GCM</div>
-          <p class="guarantee">Scrypt derives the only key from your passphrase. The renderer never sees it. There is no recovery backdoor, no cloud copy, and no chain receipt. The chain below is a hash of ciphertext on this machine.</p>
+          <div class="card-title"><span>◆</span> AES-256-GCM <button id="say-guarantee" type="button">Say it</button></div>
+          <div class="guarantee" id="vault-statement">
+            <p>The guarantee is owner-held encryption. Scrypt derives the only AES-256-GCM key from the passphrase. That key stays in the main process. A wrong passphrase fails closed. This panel initializes, unlocks, locks, and lists sealed notes only while the vault is open.</p>
+            <p>The exit is a ciphertext bundle. Export exit writes novasvaul-exit.json with the encrypted records and the KDF manifest, and without the key.</p>
+            <p>The chain on this panel is a SHA-256 over those ciphertext files. It changes when a record changes. It is a local integrity hash, not a chain transaction.</p>
+            <p>This app does not claim team memory, on-chain custody, a hardware air-gap, or a recovery backdoor.</p>
+          </div>
           <code id="vault-chain">—</code>
         </div>
         <form class="runtime-card" id="vault-gate">
