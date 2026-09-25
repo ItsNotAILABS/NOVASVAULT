@@ -1,0 +1,21 @@
+{
+  "name": "novasvaul",
+  "version": "0.1.0",
+  "private": true,
+  "description": "NOVASVAUL — a sovereign local virtual computer and file explorer runtime.",
+  "main": "main.cjs",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron .",
+    "test": "node --test test/*.test.cjs"
+  },
+  "devDependencies": {
+    "@openzeppelin/contracts": "^5.6.1",
+    "electron": "^37.2.6",
+    "esbuild": "^0.28.2",
+    "solc": "^0.8.37"
+  },
+  "dependencies": {
+    "viem": "^2.56.3"
+  }
+}
