@@ -12,5 +12,5 @@ test('project has the expected isolated runtime files', async () => {
 
 test('renderer exposes the laptop explorer surfaces', async () => {
   const html = await require('node:fs/promises').readFile(path.resolve(__dirname, '../src/index.html'), 'utf8');
-  for (const label of ['Home', 'Documents', 'Nova Vault', 'Owner-held vault', 'AES-256-GCM', 'Export exit', 'Say it', 'does not claim']) assert.match(html, new RegExp(label));
+  for (const label of ['Home', 'Documents', 'Nova Vault', 'Owner-held vault', 'AES-256-GCM', 'Export to CAPSULA', 'Say it', 'does not claim']) assert.match(html, new RegExp(label));
 });

@@ -20,6 +20,14 @@ The right-hand panel is the vault, not a pretend agent roster. It initializes or
 
 This app guarantees one thing: the passphrase derives the only AES-256-GCM key, with scrypt, and that key never reaches the renderer. It does not guarantee team memory, on-chain custody, hardware air-gap, or a recovery backdoor.
 
+## CAPSULA
+
+VAUL seals the computer; CAPSULA carries it. Export to CAPSULA writes a capsule.contract.v1 bundle. The bundle is ciphertext. CAPSULA refuses plaintext (ciphertext_only must be true). This is not team memory, not an on-chain receipt, and not a hardware air-gap.
+
+CAPSULA: https://github.com/ItsNotAILABS/CAPSULA
+
+NOVASVAUL: https://github.com/ItsNotAILABS/NOVASVAUL
+
 ## Product direction
 
 - Explorer: files, folders, search, and local previews inside the home boundary.
@@ -32,6 +40,6 @@ This app guarantees one thing: the passphrase derives the only AES-256-GCM key, 
 
 Encrypted records live under the hidden `.nova` directory inside the app-owned vault. The main process derives a 256-bit key from a passphrase with scrypt and retains it only while the vault is unlocked. AES-256-GCM authenticates record content and encrypted metadata. Record filenames are keyed HMAC-SHA-256 identifiers, writes use same-directory temporary files followed by rename, and restricted record IDs cannot traverse the storage directory. Runtime state uses the same encrypted record layer.
 
-The frozen, context-isolated bridge exposes `nova.vault.status/initialize/unlock/lock/list/read/write/delete/seal/exportExit` and `nova.runtime.load/save`. The renderer never receives the derived key or private storage path. Records are capped at 16 MiB. Closing the window or quitting clears the main process's in-memory key buffer.
+The frozen, context-isolated bridge exposes `nova.vault.status/initialize/unlock/lock/list/read/write/delete/seal/exportExit/exportCapsule` and `nova.runtime.load/save`. The renderer never receives the derived key or private storage path. Records are capped at 16 MiB. Closing the window or quitting clears the main process's in-memory key buffer.
 
 The unlock screen is in the app. There is still no passphrase recovery, key rotation, OS keychain, multi-process lock, or secure deletion. A wrong passphrase fails closed. Tampered ciphertext fails authentication. The exit file is the encrypted records and the KDF manifest, which a new machine needs in order to unlock with the same passphrase. It cannot protect data from malware running as the same OS user while the vault is unlocked.

@@ -113,6 +113,16 @@ function registerIpc() {
   });
   ipcMain.handle('nova:vault-delete', (_event, id) => vaultStore.delete(id));
   ipcMain.handle('nova:vault-seal', () => vaultStore.seal());
+  ipcMain.handle('nova:vault-export-capsule', async () => {
+    const bundle = await vaultStore.exportCapsule();
+    const result = await dialog.showSaveDialog(mainWindow, {
+      defaultPath: 'novasvaul-capsule.json',
+      filters: [{ name: 'JSON', extensions: ['json'] }]
+    });
+    if (result.canceled || !result.filePath) return { ok: false, canceled: true };
+    await fs.writeFile(result.filePath, `${JSON.stringify(bundle, null, 2)}\n`, { encoding: 'utf8', mode: 0o600 });
+    return { ok: true, path: result.filePath, content_hash: bundle.manifest.content_hash };
+  });
   ipcMain.handle('nova:vault-export', async () => {
     const bundle = await vaultStore.exportExit();
     const result = await dialog.showSaveDialog(mainWindow, {

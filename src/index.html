@@ -30,7 +30,7 @@
 
       <main class="explorer">
         <div class="explorer-head"><div><div class="eyebrow" id="view-eyebrow">LOCAL FILES</div><h1 id="view-title">Home</h1></div><div class="head-actions"><button id="new-folder" class="quiet-button">＋ New folder</button><button id="view-list" class="view-toggle selected">☷</button><button id="view-grid" class="view-toggle">⊞</button></div></div>
-        <div class="quick-strip"><button data-location="vault"><span class="quick-icon violet">◆</span><span><b>Nova Vault</b><small>Ciphertext on this machine</small></span></button><button id="quick-note" type="button"><span class="quick-icon blue">≡</span><span><b>Sealed note</b><small>Written only while unlocked</small></span></button><button id="quick-exit" type="button"><span class="quick-icon green">↗</span><span><b>Export exit</b><small>Ciphertext bundle, no key</small></span></button></div>
+        <div class="quick-strip"><button data-location="vault"><span class="quick-icon violet">◆</span><span><b>Nova Vault</b><small>Ciphertext on this machine</small></span></button><button id="quick-note" type="button"><span class="quick-icon blue">≡</span><span><b>Sealed note</b><small>Written only while unlocked</small></span></button><button id="quick-exit" type="button"><span class="quick-icon green">↗</span><span><b>Export to CAPSULA</b><small>Ciphertext bundle, no key</small></span></button></div>
         <div class="file-toolbar"><span id="item-count">0 items</span><div><button id="sort-name">Name ↕</button><button id="filter">☷ Filter</button></div></div>
         <div id="file-view" class="file-view"><div class="empty-state"><div class="loader"></div><p>Opening local workspace…</p></div></div>
         <footer class="statusbar"><span id="status-text">Ready</span><span id="status-selection"></span><span class="status-right">NOVASVAUL 0.1 · LOCAL-FIRST</span></footer>
@@ -42,7 +42,7 @@
           <div class="card-title"><span>◆</span> AES-256-GCM <button id="say-guarantee" type="button">Say it</button></div>
           <div class="guarantee" id="vault-statement">
             <p>The guarantee is owner-held encryption. Scrypt derives the only AES-256-GCM key from the passphrase. That key stays in the main process. A wrong passphrase fails closed. This panel initializes, unlocks, locks, and lists sealed notes only while the vault is open.</p>
-            <p>The exit is a ciphertext bundle. Export exit writes novasvaul-exit.json with the encrypted records and the KDF manifest, and without the key.</p>
+            <p>The exit is a ciphertext bundle. Export to CAPSULA writes novasvaul-capsule.json, a capsule.contract.v1 bundle of encrypted records and the KDF manifest, and without the key.</p>
             <p>The chain on this panel is a SHA-256 over those ciphertext files. It changes when a record changes. It is a local integrity hash, not a chain transaction.</p>
             <p>This app does not claim team memory, on-chain custody, a hardware air-gap, or a recovery backdoor.</p>
           </div>
@@ -60,7 +60,7 @@
           <button class="quiet-button" type="submit">Seal note</button>
           <ul id="vault-records"></ul>
         </form>
-        <button id="vault-export" class="console-button" type="button">↗ Export exit <kbd>ciphertext</kbd></button>
+        <button id="vault-export" class="console-button" type="button">↗ Export to CAPSULA <kbd>ciphertext</kbd></button>
       </aside>
     </div>
   </div>

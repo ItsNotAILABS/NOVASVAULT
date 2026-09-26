@@ -98,9 +98,9 @@ $('quick-note').onclick = () => { $('note-id').focus(); };
 $('focus-notes').onclick = () => $('note-id').focus();
 async function exportExit() {
   try {
-    const result = await window.nova.vault.exportExit();
+    const result = await window.nova.vault.exportCapsule();
     if (result.canceled) return;
-    setToast(`Exit bundle saved. Chain ${result.chain.slice(0, 12)}.`);
+    setToast('Export to CAPSULA saved.');
   } catch (error) { setToast(error.message); }
 }
 function sayGuarantee() {
